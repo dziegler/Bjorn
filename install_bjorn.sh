@@ -320,6 +320,16 @@ setup_bjorn() {
 
     # Install requirements with --break-system-packages flag
     log "INFO" "Installing Python requirements..."
+
+    # Prefer wheels when installing dependencies to avoid build issues on limited systems
+    log "INFO" "Configuring pip to prefer piwheels..."
+    mkdir -p /etc/pip
+    cat > /etc/pip/pip.conf << EOF
+[global]
+extra-index-url = https://www.piwheels.org/simple
+prefer-binary = yes
+EOF
+    check_success "Configured pip with piwheels repository"
     
     pip3 install -r requirements.txt --break-system-packages
     check_success "Installed Python requirements"
