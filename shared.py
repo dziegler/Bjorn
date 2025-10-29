@@ -282,6 +282,7 @@ class SharedData:
         self.wifichanged = False
         self.bluetooth_active = False
         self.wifi_connected = False
+        self.current_ssid = ""
         self.pan_connected = False
         self.usb_active = False
         self.bjornsays = "Hacking away..."

@@ -239,10 +239,15 @@ class Display:
             ssid, error = result.communicate()
             if result.returncode != 0:
                 logger.error(f"Error executing 'iwgetid -r': {error}")
+                self.shared_data.current_ssid = ""
                 return False
-            return bool(ssid.strip())
+            
+            current_ssid = ssid.strip()
+            self.shared_data.current_ssid = current_ssid
+            return bool(current_ssid)
         except Exception as e:
             logger.error(f"Error checking WiFi status: {e}")
+            self.shared_data.current_ssid = ""
             return False
 
     def is_manual_mode(self):
@@ -285,7 +290,13 @@ class Display:
                 image = Image.new('1', (self.shared_data.width, self.shared_data.height))
                 draw = ImageDraw.Draw(image)
                 draw.rectangle((0, 0, self.shared_data.width, self.shared_data.height), fill=255)
-                draw.text((int(37 * self.scale_factor_x), int(5 * self.scale_factor_y)), "BJORN", font=self.shared_data.font_viking, fill=0)
+                # Display SSID name or "BJORN" if not connected
+                if self.shared_data.wifi_connected and self.shared_data.current_ssid:
+                    # Truncate SSID if too long to fit on display
+                    ssid_display = self.shared_data.current_ssid[:12] + "..." if len(self.shared_data.current_ssid) > 15 else self.shared_data.current_ssid
+                    draw.text((int(37 * self.scale_factor_x), int(5 * self.scale_factor_y)), ssid_display, font=self.shared_data.font_arial9, fill=0)
+                else:
+                    draw.text((int(37 * self.scale_factor_x), int(5 * self.scale_factor_y)), "BJORN", font=self.shared_data.font_viking, fill=0)
                 draw.text((int(110 * self.scale_factor_x), int(170 * self.scale_factor_y)), self.manual_mode_txt, font=self.shared_data.font_arial14, fill=0)
                 
                 if self.shared_data.wifi_connected:
