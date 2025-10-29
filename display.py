@@ -293,8 +293,8 @@ class Display:
                 # Display SSID name or "BJORN" if not connected
                 if self.shared_data.wifi_connected and self.shared_data.current_ssid:
                     # Truncate SSID if too long to fit on display
-                    ssid_display = self.shared_data.current_ssid[:12] + "..." if len(self.shared_data.current_ssid) > 15 else self.shared_data.current_ssid
-                    draw.text((int(37 * self.scale_factor_x), int(5 * self.scale_factor_y)), ssid_display, font=self.shared_data.font_arial9, fill=0)
+                    ssid_display = self.shared_data.current_ssid[:17] + "..." if len(self.shared_data.current_ssid) > 20 else self.shared_data.current_ssid
+                    draw.text((int(25 * self.scale_factor_x), int(7 * self.scale_factor_y)), ssid_display, font=self.shared_data.font_arial9, fill=0)
                 else:
                     draw.text((int(37 * self.scale_factor_x), int(5 * self.scale_factor_y)), "BJORN", font=self.shared_data.font_viking, fill=0)
                 draw.text((int(110 * self.scale_factor_x), int(170 * self.scale_factor_y)), self.manual_mode_txt, font=self.shared_data.font_arial14, fill=0)
